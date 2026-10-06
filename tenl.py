@@ -49,8 +49,6 @@ def run_block(s):
         raise AttributeError("block must have 3 args (<com>, <val1>, <val2>): " + ",\n".join(s))
     match s[0].strip():
         case "set":
-            if var.get(s[1].strip()) == None:
-                raise SyntaxError("variable not found: " + s[1])
             var[s[1].strip()] = run_block(s[2])
             return 0
         case "printn":
