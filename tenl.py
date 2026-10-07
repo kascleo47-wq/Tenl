@@ -47,31 +47,29 @@ def run_block(s):
     s = split_if(s[1:][:-1].strip(), ",", "(", ")")
     if len(s) != 3:
         raise AttributeError("block must have 3 args (<com>, <val1>, <val2>): " + ",\n".join(s))
+ 
     match s[0].strip():
-        case "set":
+        case "=":
             var[s[1].strip()] = run_block(s[2])
             return 0
-        case "printn":
-            print(run_block(s[1]), run_block(s[2]))
-            return 0
-        case "printc":
+        case "|":
             print(chr(run_block(s[1])) + chr(run_block(s[2])))
             return 0
-        case "for":
+        case ":":
             run = 0
             while True:
                 if not run_block(s[1]):
                     return run
                 run = run_block(s[2])
-        case "if":
+        case "?":
             if run_block(s[1]):
                 return run_block(s[2])
             else:
                 return 0
-        case "do":
+        case ".":
             run_block(s[1])
             run_block(s[2])
-        case "inputc":
+        case "_":
             return ord((input(chr(run_block(s[1])) + chr(run_block(s[2]))) + " ")[0])
         case "+":
             return run_block(s[1]) + run_block(s[2])
@@ -81,20 +79,10 @@ def run_block(s):
             return int(run_block(s[1]) / run_block(s[2]))
         case "*":
             return run_block(s[1]) * run_block(s[2])
-        case "%":
-            return int(run_block(s[1]) % run_block(s[2]))
         case "<":
             return int(run_block(s[1]) < run_block(s[2]))
-        case ">":
-            return int(run_block(s[1]) > run_block(s[2]))
         case "==":
             return int(run_block(s[1]) == run_block(s[2]))
-        case "!=":
-            return int(run_block(s[1]) != run_block(s[2]))
-        case "<=":
-            return int(run_block(s[1]) <= run_block(s[2]))
-        case ">=":
-            return int(run_block(s[1]) >= run_block(s[2]))
         case _:
             raise NameError("keyword or Op not defined: " + s[0])
 with open(sys.argv[1], "r") as f:
